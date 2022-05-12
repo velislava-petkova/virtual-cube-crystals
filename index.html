@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>E1113: Кубична текстура</title>
+		<title>VRAR cube</title>
 		<meta charset="utf-8">
 		
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -24,6 +24,28 @@
 				'posx.jpg', 'negx.jpg',
 				'posy.jpg', 'negy.jpg',
 				'posz.jpg', 'negz.jpg' ] );
+				
+				
+			var geometry = new THREE.DodecahedronGeometry( 1 );
+
+			var n = 300;
+			var objects = [];
+			for( var i=0; i<n; i++)
+			{
+				var material = new THREE.MeshLambertMaterial( {transparent:true, opacity:0.5} ),
+					mesh = new THREE.Mesh( geometry, material );
+					
+				mesh.scale.set( 20, 40, 20 );
+				
+				var r = THREE.Math.randFloat(700,2000),
+					a = THREE.Math.randFloat(0,2*Math.PI),
+					b = THREE.Math.randFloat(Math.PI/4,Math.PI/1.8);
+				mesh.position.setFromSphericalCoords( r, b, a );
+				
+				objects.push( mesh );
+				scene.add( mesh );
+			}
+
 				
 			window.addEventListener( "deviceorientation", deviceOrientation, true);
 
