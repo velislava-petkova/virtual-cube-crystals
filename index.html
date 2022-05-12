@@ -59,19 +59,31 @@
 		}
 		window.addEventListener( "deviceorientation", deviceOrientation, true);
 
+			function deviceOrientation( event )
+			{
+				// взимаме ъглите
+				var alpha = event.alpha,
+					gamma = event.gamma;
 
-//Ъглите са настроени така, че трябва да е включено автоматично завъртане на екрана
-//или да е превключено на пейзажна ориентация
-		function deviceOrientation( event )
-		{
-			var alpha = THREE.Math.degToRad( event.alpha ),
-			beta = THREE.Math.degToRad( event.beta ),
-			gamma = THREE.Math.degToRad( event.gamma );
+				if( alpha === null ) return;
 				
+				// поправяме ги, за да ни е удобно
+				if( gamma>=0 )
+					gamma = 90-gamma;
+				else
+				{
+					alpha = alpha+180;
+					gamma = -90-gamma;
+				}
+									
+				// правим ги на радиани
+				alpha = THREE.Math.degToRad( alpha );
+				gamma = THREE.Math.degToRad( gamma );
 				
-			camera.rotation.set( gamma, alpha, 0, 'YXZ' );
-	
-		}
+				// въртим камерата
+				camera.rotation.set( gamma, alpha, 0, 'YXZ' );
+			}
+			
 			
 		</script>
 		
