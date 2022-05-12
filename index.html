@@ -46,19 +46,32 @@
 				scene.add( mesh );
 			}
 
-				
-			window.addEventListener( "deviceorientation", deviceOrientation, true);
+				function calculateGamma( gamma ){
+			
+			//if (gamma<0)return -gamma-Math.PI/2;
+			//else return -gamma +Math.PI/2;
+			
+			if( gamma>=0 )
+					return gamma = Math.PI/2-gamma;
+			else return gamma = -Math.PI/2-gamma;
+		
+		
+		}
+		window.addEventListener( "deviceorientation", deviceOrientation, true);
 
-			function deviceOrientation( event )
-			{
-				var alpha = THREE.Math.degToRad( event.alpha ),
-				beta = THREE.Math.degToRad( event.beta ),
-				gamma = THREE.Math.degToRad( event.gamma );
+
+//Ъглите са настроени така, че трябва да е включено автоматично завъртане на екрана
+//или да е превключено на пейзажна ориентация
+		function deviceOrientation( event )
+		{
+			var alpha = THREE.Math.degToRad( event.alpha ),
+			beta = THREE.Math.degToRad( event.beta ),
+			gamma = THREE.Math.degToRad( event.gamma );
 				
 				
-				camera.rotation.set( beta-Math.PI/2, (Math.PI/2+gamma)*0.02, 0, 'YXZ' );
+			camera.rotation.set( calculateGamma( gamma ), alpha, 0, 'YXZ' );
 	
-			}
+		}
 			
 		</script>
 		
