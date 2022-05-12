@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>E1113: Кубична текстура</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="OrbitControls.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			vaxInit();
+			
+			camera.fov = 50;
+			onWindowResize();
+	
+						
+			scene.background = new THREE.CubeTextureLoader().load( [
+				'posx.jpg', 'negx.jpg',
+				'posy.jpg', 'negy.jpg',
+				'posz.jpg', 'negz.jpg' ] );
+				
+			window.addEventListener( "deviceorientation", deviceOrientation, true);
+
+			function deviceOrientation( event )
+			{
+				var alpha = THREE.Math.degToRad( event.alpha ),
+				beta = THREE.Math.degToRad( event.beta ),
+				gamma = THREE.Math.degToRad( event.gamma );
+				
+				
+				camera.rotation.set( beta-Math.PI/2, gamma, 0, 'YXZ' );
+	
+			}
+			
+		</script>
+		
+	</body>
+</html>
