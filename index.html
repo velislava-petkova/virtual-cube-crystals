@@ -19,55 +19,60 @@
 			camera.fov = 50;
 			onWindowResize();
 	
-						
 			scene.background = new THREE.CubeTextureLoader().load( [
 				'posx.jpg', 'negx.jpg',
 				'posy.jpg', 'negy.jpg',
-				'posz.jpg', 'negz.jpg' ] );
+				'posz.jpg', 'negz.jpg' ]);
+		
+		
+			const textureCube = new THREE.CubeTextureLoader().load([
+				'posx.jpg', 'negx.jpg',
+				'posy.jpg', 'negy.jpg',
+				'posz.jpg', 'negz.jpg' ]);
 				
-				
+			textureCube.mapping = THREE.CubeRefractionMapping;
+								
 			var geometry = new THREE.DodecahedronGeometry( 1 );
+			var material = new THREE.MeshBasicMaterial( {
+				color: 0xffffff,
+				envMap: textureCube, 
+				refractionRatio: 0.95 } );
 
-			var n = 300;
-			var objects = [];
+			
+			var n = 200;
+			var crystals=[];
+				
 			for( var i=0; i<n; i++)
 			{
-				var material = new THREE.MeshLambertMaterial( {transparent:true, opacity:0.5} ),
-					mesh = new THREE.Mesh( geometry, material );
-					
-				mesh.scale.set( 20, 40, 20 );
+				crystal = new THREE.Mesh( geometry, material );
+				crystal.scale.set( 50, 50, 50 );
 				
 				var r = THREE.Math.randFloat(700,2000),
 					a = THREE.Math.randFloat(0,2*Math.PI),
 					b = THREE.Math.randFloat(Math.PI/4,Math.PI/1.8);
-				mesh.position.setFromSphericalCoords( r, b, a );
+				crystal.position.setFromSphericalCoords( r, b, a );
 				
-				objects.push( mesh );
-				scene.add( mesh );
+				crystals.push(crystal);
+				scene.add( crystal );
 			}
-
-				function calculateGamma( gamma ){
-			
-			//if (gamma<0)return -gamma-Math.PI/2;
-			//else return -gamma +Math.PI/2;
-			
-			if( gamma>=0 )
-					return gamma = Math.PI/2-gamma;
-			else return gamma = -Math.PI/2-gamma;
 		
-		
-		}
-		window.addEventListener( "deviceorientation", deviceOrientation, true);
+			window.addEventListener( "deviceorientation", deviceOrientation, true);
 
-			function deviceOrientation( event )
-			{
-				// взимаме ъглите
+			function animate( t ){
+						
+				for( var i=0; i<n; i++){
+				crystals[i].rotation.set(0,t/3,0);
+				}
+			}		
+					
+					
+			function deviceOrientation( event ){
+						
 				var alpha = event.alpha,
 					gamma = event.gamma;
 
 				if( alpha === null ) return;
 				
-				// поправяме ги, за да ни е удобно
 				if( gamma>=0 )
 					gamma = 90-gamma;
 				else
@@ -76,16 +81,19 @@
 					gamma = -90-gamma;
 				}
 									
-				// правим ги на радиани
 				alpha = THREE.Math.degToRad( alpha );
 				gamma = THREE.Math.degToRad( gamma );
 				
-				// въртим камерата
+							
 				camera.rotation.set( gamma, alpha, 0, 'YXZ' );
+				
+				
+				
 			}
-			
 			
 		</script>
 		
 	</body>
 </html>
+
+
